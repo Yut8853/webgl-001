@@ -1,50 +1,74 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-const scene = new THREE.Scene()
+window.addEventListener('DOMContentLoaded', () => {
+    // 制御クラスのインスタンス化
+    const app = new App3();
+    // 初期化
+    app.init();
 
-const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-)
-camera.position.z = 2
+    app.render();
+}, false);
 
-const renderer = new THREE.WebGLRenderer()
-renderer.setSize(window.innerWidth, window.innerHeight)
-document.body.appendChild(renderer.domElement)
+class App3 {
+    //カメラ定義
+    static get CAMERA_PARAM(): {
+            fovy: number,
+            aspect: number,
+            near: number,
+            far: number,
+            x: number,
+            y: number,
+            z: number,
+            lookAt: THREE.Vector3,
+        } {
+        return {
+            fovy: 60,
+            aspect: window.innerWidth / window.innerHeight,
+            near: 0.1,
+            far: 10.0,
+            x: 0.0,
+            y: 0.0,
+            z: 5.0,
+            lookAt: new THREE.Vector3(0.0, 0.0, 0.0),
+        }
+    }
+    
 
-new OrbitControls(camera, renderer.domElement)
+    static get RENDERER_PARAM(): {
+        clearColor: number,
+        width: number,
+        height: number
+    } {
+        return {
+            clearColor: 0x666666,
+            width: window.innerWidth,
+            height: window.innerHeight,
+        };
+    }
 
-const geometry = new THREE.BoxGeometry()
-const material = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-    wireframe: true,
-})
+    static get MATERIAL_PARAM(): {
+        color: number
+    } {
+        return {
+            color: 0x3399ff,
+        };
+    }
 
-const cube = new THREE.Mesh(geometry, material)
-scene.add(cube)
+    renderer!: THREE.WebGLRenderer;
+    scene!: THREE.Scene;
+    camera!: THREE.Camera;
+    geometry!: THREE.BoxGeometry;
+    material!: THREE.Material;
+    box!: THREE.Mesh;
 
-window.addEventListener('resize', onWindowResize, false)
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight
-    camera.updateProjectionMatrix()
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    render()
+    init() {
+        
+        this.renderer = new THREE.WebGLRenderer();
+        this.renderer.setClearColor(new THREE.Color(App3.RENDERER_PARAM.clearColor));
+        this.renderer.setSize(App3.RENDERER_PARAM.width, App3.RENDERER_PARAM.height);
+        const wrapper = document.querySelector('.webgl');
+        wrapper.appendChild(this.renderer.domElement);
+
+        this.scene = new THREE.Scene();
+    }
 }
-
-function animate() {
-    requestAnimationFrame(animate)
-
-    cube.rotation.x += 0.01
-    cube.rotation.y += 0.01
-
-    render()
-}
-
-function render() {
-    renderer.render(scene, camera)
-}
-
-animate()
