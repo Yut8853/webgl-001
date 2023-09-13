@@ -12,27 +12,55 @@ window.addEventListener('DOMContentLoaded', () => {
 
 class App3 {
     //カメラ定義
-    static CAMERA_PARAM =  {
-            fovy: 60,
-            aspect: window.innerWidth / window.innerHeight,
-            near: 0.1,
-            far: 10.0,
-            x: 0.0,
-            y: 0.0,
-            z: 5.0,
-            lookAt: new THREE.Vector3(0.0, 0.0, 0.0),
-        }
+    static CAMERA_PARAM : {
+        fovy: number;
+        aspect: number;
+        near: number;
+        far: number;
+        x: number;
+        y: number;
+        z: number;
+        lookAt: THREE.Vector3;
+    } = {
+        fovy: 60,
+        aspect: window.innerWidth / window.innerHeight,
+        near: 0.1,
+        far: 10.0,
+        x: 0.0,
+        y: 0.0,
+        z: 5.0,
+        lookAt: new THREE.Vector3(0.0, 0.0, 0.0),
+    };
 
-    static RENDERER_PARAM = {
-            clearColor: 0x666666,
-            width: window.innerWidth,
-            height: window.innerHeight,
-        };
+    static RENDERER_PARAM: {
+        clearColor: number;
+        width: number;
+        height: number;
+    } = {
+        clearColor: 0x666666,
+        width: window.innerWidth,
+        height: window.innerHeight,
+    }
 
+    static DIRECTIONAL_LIGHT_PARAM: {
+        color: number;
+        intensity: number;
+        x: number;
+        y: number;
+        z: number;
+    } = {
+        color: 0xffffff,
+        intensity: 1.0,
+        x: 1.0,
+        y: 1.0,
+        z: 1.0,
+    }
 
-    static MATERIAL_PARAM =  {
-            color: 0x3399ff,
-        };
+    static MATERIAL_PARAM : {
+        color: number;
+    } = {
+        color: 0xff00000,
+    }
 
     renderer!: THREE.WebGLRenderer;
     scene!: THREE.Scene;
@@ -88,8 +116,19 @@ class App3 {
         );
         this.camera.lookAt(App3.CAMERA_PARAM.lookAt);
 
+        const directionalLight = new THREE.DirectionalLight(
+            App3.DIRECTIONAL_LIGHT_PARAM.color,
+            App3.DIRECTIONAL_LIGHT_PARAM.intensity
+        );
+        directionalLight.position.set(
+            App3.DIRECTIONAL_LIGHT_PARAM.x,
+            App3.DIRECTIONAL_LIGHT_PARAM.y,
+            App3.DIRECTIONAL_LIGHT_PARAM.z
+        );
+        this.scene.add(directionalLight);
+
         this.geometry = new THREE.BoxGeometry(1.0, 1.0, 1.0);
-        this.material = new THREE.MeshBasicMaterial(App3.MATERIAL_PARAM);
+        this.material = new THREE.MeshLambertMaterial(App3.MATERIAL_PARAM);
 
         this.box = new THREE.Mesh(this.geometry, this.material);
         this.scene.add(this.box);
