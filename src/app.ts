@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 window.addEventListener('DOMContentLoaded', () => {
     // 制御クラスのインスタンス化
@@ -60,6 +61,13 @@ class App3 {
     geometry!: THREE.BoxGeometry;
     material!: THREE.Material;
     box!: THREE.Mesh;
+    controls!: OrbitControls;
+
+
+    constructor() {
+
+    this.render = this.render.bind(this);
+    }
 
     init() {
         
@@ -91,12 +99,16 @@ class App3 {
 
         this.box = new THREE.Mesh(this.geometry, this.material);
         this.scene.add(this.box);
+
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     }
 
     render() {
         requestAnimationFrame(() => {
             this.render();
         });
+
+        this.controls.update();
 
         this.box.rotation.x += 0.01;
         this.box.rotation.y += 0.01;
