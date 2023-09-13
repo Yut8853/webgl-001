@@ -12,7 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 class App3 {
     //カメラ定義
-    static CAMERA_PARAM : {
+    static readonly CAMERA_PARAM : {
         fovy: number;
         aspect: number;
         near: number;
@@ -72,7 +72,7 @@ class App3 {
 
     renderer!: THREE.WebGLRenderer;
     scene!: THREE.Scene;
-    camera!: THREE.Camera;
+    camera!: THREE.PerspectiveCamera;
     geometry!: THREE.BoxGeometry;
     material!: THREE.Material;
     box!: THREE.Mesh;
@@ -84,6 +84,7 @@ class App3 {
         
         this.render = this.render.bind(this);
         this.keyListeners()
+        this.resizeEvent()
     }
 
     keyListeners(): void {
@@ -97,6 +98,14 @@ class App3 {
                 this.isDown = false;
             }
         })
+    }
+
+    resizeEvent(): void {
+        window.addEventListener('resize', () => {
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            this.camera.aspect = window.innerWidth / window.innerHeight;
+            this.camera.updateProjectionMatrix();
+        });
     }
 
     init(): void {
