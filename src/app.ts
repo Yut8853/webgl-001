@@ -67,8 +67,40 @@ class App3 {
         this.renderer.setClearColor(new THREE.Color(App3.RENDERER_PARAM.clearColor));
         this.renderer.setSize(App3.RENDERER_PARAM.width, App3.RENDERER_PARAM.height);
         const wrapper = document.querySelector('.webgl');
-        wrapper.appendChild(this.renderer.domElement);
+        if (wrapper) {
+            wrapper.appendChild(this.renderer.domElement);
+        }
 
         this.scene = new THREE.Scene();
+
+        this.camera = new THREE.PerspectiveCamera(
+            App3.CAMERA_PARAM.fovy,
+            App3.CAMERA_PARAM.aspect,
+            App3.CAMERA_PARAM.near,
+            App3.CAMERA_PARAM.far
+        );
+        this.camera.position.set(
+            App3.CAMERA_PARAM.x,
+            App3.CAMERA_PARAM.y,
+            App3.CAMERA_PARAM.z
+        );
+        this.camera.lookAt(App3.CAMERA_PARAM.lookAt);
+
+        this.geometry = new THREE.BoxGeometry(1.0, 1.0, 1.0);
+        this.material = new THREE.MeshBasicMaterial(App3.MATERIAL_PARAM);
+
+        this.box = new THREE.Mesh(this.geometry, this.material);
+        this.scene.add(this.box);
+    }
+
+    render() {
+        requestAnimationFrame(() => {
+            this.render();
+        });
+
+        this.box.rotation.x += 0.01;
+        this.box.rotation.y += 0.01;
+
+        this.renderer.render(this.scene, this.camera);
     }
 }
