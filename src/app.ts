@@ -56,6 +56,14 @@ class App3 {
         z: 1.0,
     }
 
+    static AMBIENT_LIGHT_PARAM: {
+        color: number;
+        intensity: number;
+    } = {
+        color: 0xffffff,
+        intensity: 0.2,
+    }
+
     static MATERIAL_PARAM : {
         color: number;
     } = {
@@ -126,6 +134,12 @@ class App3 {
             App3.DIRECTIONAL_LIGHT_PARAM.z
         );
         this.scene.add(directionalLight);
+
+        const ambientLight = new THREE.AmbientLight(
+            App3.AMBIENT_LIGHT_PARAM.color,
+            App3.AMBIENT_LIGHT_PARAM.intensity
+        );
+        this.scene.add(ambientLight);
 
         this.geometry = new THREE.BoxGeometry(1.0, 1.0, 1.0);
         this.material = new THREE.MeshLambertMaterial(App3.MATERIAL_PARAM);
