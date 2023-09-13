@@ -12,17 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 class App3 {
     //カメラ定義
-    static get CAMERA_PARAM(): {
-            fovy: number,
-            aspect: number,
-            near: number,
-            far: number,
-            x: number,
-            y: number,
-            z: number,
-            lookAt: THREE.Vector3,
-        } {
-        return {
+    static CAMERA_PARAM =  {
             fovy: 60,
             aspect: window.innerWidth / window.innerHeight,
             near: 0.1,
@@ -32,28 +22,17 @@ class App3 {
             z: 5.0,
             lookAt: new THREE.Vector3(0.0, 0.0, 0.0),
         }
-    }
-    
 
-    static get RENDERER_PARAM(): {
-        clearColor: number,
-        width: number,
-        height: number
-    } {
-        return {
+    static RENDERER_PARAM = {
             clearColor: 0x666666,
             width: window.innerWidth,
             height: window.innerHeight,
         };
-    }
 
-    static get MATERIAL_PARAM(): {
-        color: number
-    } {
-        return {
+
+    static MATERIAL_PARAM =  {
             color: 0x3399ff,
         };
-    }
 
     renderer!: THREE.WebGLRenderer;
     scene!: THREE.Scene;
@@ -62,14 +41,14 @@ class App3 {
     material!: THREE.Material;
     box!: THREE.Mesh;
     controls!: OrbitControls;
-
+    axesHelper!: THREE.AxesHelper;
 
     constructor() {
 
     this.render = this.render.bind(this);
     }
 
-    init() {
+    init(): void {
         
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setClearColor(new THREE.Color(App3.RENDERER_PARAM.clearColor));
@@ -101,9 +80,12 @@ class App3 {
         this.scene.add(this.box);
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    }
 
-    render() {
+        const axesHelperLength = 5.0;
+        this.axesHelper = new THREE.AxesHelper(axesHelperLength);
+        this.scene.add(this.axesHelper);    }
+
+    render(): void {
         requestAnimationFrame(() => {
             this.render();
         });
