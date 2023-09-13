@@ -42,10 +42,25 @@ class App3 {
     box!: THREE.Mesh;
     controls!: OrbitControls;
     axesHelper!: THREE.AxesHelper;
-
+    isDown: boolean = false;
+    
     constructor() {
+        
+        this.render = this.render.bind(this);
+        this.keyListeners()
+    }
 
-    this.render = this.render.bind(this);
+    keyListeners(): void {
+        window.addEventListener('keydown',(keyEvent) => {
+            if(keyEvent.key === ' ') {
+                this.isDown = true;
+            }
+        })
+        window.addEventListener('keyup',(keyEvent) => {
+            if(keyEvent.key === ' ') {
+                this.isDown = false;
+            }
+        })
     }
 
     init(): void {
@@ -83,17 +98,20 @@ class App3 {
 
         const axesHelperLength = 5.0;
         this.axesHelper = new THREE.AxesHelper(axesHelperLength);
-        this.scene.add(this.axesHelper);    }
+        this.scene.add(this.axesHelper);
+    }
 
     render(): void {
         requestAnimationFrame(() => {
             this.render();
         });
 
-        this.controls.update();
+        if(this.isDown) {
+            this.box.rotation.x += 0.01;
+            this.box.rotation.y += 0.01;
+        }
 
-        this.box.rotation.x += 0.01;
-        this.box.rotation.y += 0.01;
+        this.controls.update();
 
         this.renderer.render(this.scene, this.camera);
     }
